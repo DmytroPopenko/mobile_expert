@@ -1,0 +1,6 @@
+experta==1.9.4
+frozendict==1.2
+PyQt5==5.15.11
+PyQt5-Qt5==5.15.16
+PyQt5_sip==12.15.0
+schema==0.6.7
