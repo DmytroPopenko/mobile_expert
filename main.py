@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QPushButton, QVBoxLayout, QWidget
 from expert.expert_agent import ExpertAgent
 from expert.schema import UserAppRequest
 
@@ -9,27 +9,34 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("My Application")
         self.resize(400, 300)
-
-        self.center = QVBoxLayout()
+        
+        my_layout = QVBoxLayout()
 
         self.text_field = QLineEdit(self)
-        self.center.addWidget(self.text_field)
+        my_layout.addWidget(self.text_field)
 
         self.button = QPushButton("Click me!", self)
-        self.button.move(20, 60)
         self.button.clicked.connect(self.on_button_click)
+        my_layout.addWidget(self.button)
+
+        central_widget = QWidget(self)
+        central_widget.setLayout(my_layout)
+        self.setCentralWidget(central_widget)
 
     def on_button_click(self):
         print("Button clicked!")
         print("Text field value:", self.text_field.text())
 
-# app = QApplication(sys.argv)
-# window = MainWindow()
-# window.show()
-# sys.exit(app.exec_())
+app = QApplication(sys.argv)
+window = MainWindow()
+window.show()
+sys.exit(app.exec_())
 
-if __name__ == "__main__":
-    expert = ExpertAgent()
-    expert.reset()
-    expert.declare(UserAppRequest(app_type="Social Media", download_count_from=100, download_count_to=10000000))
-    expert.run()
+# if __name__ == "__main__":
+#     expert = ExpertAgent()
+#     expert.reset()
+#     expert.declare(UserAppRequest(
+#         category="Games",
+#         user_rating=5.0
+#     ))
+#     expert.run()

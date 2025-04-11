@@ -1,5 +1,6 @@
 # Requirements
 - Python v3.8
+- App store csv file with reletive data
 
 # Getting started (Linux)
 
