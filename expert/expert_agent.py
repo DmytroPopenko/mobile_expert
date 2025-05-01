@@ -3,10 +3,14 @@ from experta import KnowledgeEngine, Fact, Rule, DefFacts, AS, L, W, P, AND, OR,
 from expert.utils import load_apps_info
 
 class ExpertAgent(KnowledgeEngine):
+    def __init__(self):
+        super().__init__()
+        self.df = load_apps_info()
+        self.output_list = []
+
     @DefFacts()
     def _initial_action(self):
-        df = load_apps_info()
-        for _, row in df.iterrows():
+        for _, row in self.df.iterrows():
             yield MobileApp(
                 name=row['track_name'],
                 size=row['size_bytes'],
@@ -17,8 +21,6 @@ class ExpertAgent(KnowledgeEngine):
                 age_rating=row['cont_rating'],   
             )
         
-
-
     @Rule(
         UserAppRequest(category=MATCH.user_cat, user_rating=MATCH.expected_rating),
         MobileApp(category=MATCH.user_cat, user_rating=MATCH.rating, name=MATCH.app_name),
@@ -26,3 +28,5 @@ class ExpertAgent(KnowledgeEngine):
     )
     def recommend_app(self, app_name):
         print(f"✅ You might like: {app_name}")
+        self.output_list.append(app_name)
+    
