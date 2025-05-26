@@ -14,6 +14,8 @@ from PyQt5.QtWidgets import (
     QSpinBox,
     QComboBox,
     QMessageBox,
+    QTextEdit,
+    QDialog
 )
 
 class MainWindow(QMainWindow):
@@ -103,13 +105,30 @@ class MainWindow(QMainWindow):
         if self.expert.output_list:
             apps = set(self.expert.output_list)
 
-            msg = QMessageBox()
-            msg.setWindowTitle("Recommended Apps")
-            msg.setText("You might like:")
-            msg.setInformativeText("\n".join(apps))
-            msg.setIcon(QMessageBox.Information)
-            msg.setStandardButtons(QMessageBox.Ok)
-            msg.exec_()
+            dialog = QDialog()
+            dialog.setWindowTitle("Recommended Apps")
+            dialog.setMinimumWidth(400)
+
+            layout = QVBoxLayout()
+
+            message = QMessageBox()
+            message.setText("You might like the following apps:")
+            message.setIcon(QMessageBox.Information)
+
+            text_edit = QTextEdit()
+            text_edit.setReadOnly(True)
+            text_edit.setStyleSheet("font-family: Consolas; font-size: 12pt;")
+            text_edit.setText("\n".join(sorted(apps)))
+
+            ok_button = QPushButton("Return to Main")
+            ok_button.clicked.connect(dialog.accept)
+
+            layout.addWidget(message)
+            layout.addWidget(text_edit)
+            layout.addWidget(ok_button)
+
+            dialog.setLayout(layout)
+            dialog.exec_()
 
             self.expert.output_list = []
             del apps
